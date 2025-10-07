@@ -2,12 +2,12 @@
 Pydantic models for request/response validation
 """
 
-# Import Libraries
 from pydantic import BaseModel, Field
 from datetime import datetime
 
+
 class HealthCheckResponse(BaseModel):
-    """Health Check Endpoint Response"""
+    """Health check endpoint response"""
     status: str
     timestamp: datetime
     message: str
@@ -15,30 +15,30 @@ class HealthCheckResponse(BaseModel):
 
 class ChatRequest(BaseModel):
     
-    message: str = Field(..., description="User's Medical Question", min_length=1, max_length=1000)
-    language: str = Field(default="en", description="Response Language (en/fr)", pattern="^(en|fr)$")
+    message: str = Field(..., min_length=1, max_length=1000, description="User's medical question")
+    language: str = Field(default="en", description="Response language (en/fr)")
 
 
 class ChatResponse(BaseModel):
-    
+   
     response: str
     language: str
     timestamp: datetime
 
 
 class AnalysisRequest(BaseModel):
-    """Medical Record Analysis Request (for text input)"""
-    text: str = Field(..., description="Medical Record Text to Analyze", min_length=1)
-    context: str = Field(default="", description="Additional Context About the Patient")
-    language: str = Field(default="en", description="Response Language")
+    """Medical record analysis request (for text input)"""
+    text: str = Field(..., min_length=1, description="Medical record text to analyze")
+    context: str = Field(default="", description="Additional context about the patient")
+    language: str = Field(default="en", description="Response language")
 
 
 class MedicalAnalysis(BaseModel):
-    """Medical Analysis"""
-    summary: str = Field(description="Brief Overview of the Medical Record")
-    key_findings: list[str] = Field(description="List of Important Findings")
-    recommendations: list[str] = Field(description="Health Recommendations")
-    next_steps: list[str] = Field(description="Suggested Next Steps")
+   
+    summary: str = Field(description="Brief overview of the medical record")
+    key_findings: list[str] = Field(description="List of important findings")
+    recommendations: list[str] = Field(description="Health recommendations")
+    next_steps: list[str] = Field(description="Suggested next steps")
 
 
 class AnalysisResponse(BaseModel):
@@ -53,20 +53,20 @@ class AnalysisResponse(BaseModel):
 
 
 class ImageAnalysisResponse(BaseModel):
-    """Image Analysis Response"""
+    """Image analysis response"""
     extracted_text: str
     analysis: AnalysisResponse
 
 
 class ResearchRequest(BaseModel):
-    """Research Request Model"""
-    query: str = Field(..., description="Medical Topic to Research", min_length=3, max_length=200)
-    max_results: str = Field(default=5, description="Number of Results", ge=1, le=10)
-    language: str = Field(default="en", description="Response Language")
+    """Research request model"""
+    query: str = Field(..., min_length=3, max_length=200, description="Medical topic to research")
+    max_results: int = Field(default=5, ge=1, le=10, description="Number of results")
+    language: str = Field(default="en", description="Response language")
 
 
 class ResearchResult(BaseModel):
-    """Single Research Result"""
+    """Single research result"""
     title: str
     url: str
     content: str
@@ -74,7 +74,7 @@ class ResearchResult(BaseModel):
 
 
 class ResearchResponse(BaseModel):
-    """Research Response Model"""
+    """Research response model"""
     query: str
     results: list[ResearchResult]
     summary: str
